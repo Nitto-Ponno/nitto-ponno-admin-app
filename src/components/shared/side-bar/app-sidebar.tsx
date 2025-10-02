@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
 import { sidebarItems } from '@/lib/data/side-bar-data';
+import { memo } from 'react';
 
 // Menu item type
 export type SidebarType = {
@@ -24,8 +25,6 @@ export type SidebarType = {
   icon?: React.ComponentType<{ className?: string }>;
   children?: SidebarType[];
 };
-
-// Sidebar data (based on screenshot)
 
 // Recursive Renderer
 function SidebarItem({ item }: { item: SidebarType }) {
@@ -73,7 +72,7 @@ function SidebarItem({ item }: { item: SidebarType }) {
   );
 }
 
-export function AppSidebar() {
+function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="">
@@ -91,3 +90,5 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+export default memo(AppSidebar);
