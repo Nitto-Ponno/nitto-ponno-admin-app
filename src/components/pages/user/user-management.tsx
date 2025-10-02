@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { GlobalTable } from '@/components/global/global-table';
+import { memo } from 'react';
 
 // Sample data type
 type User = {
@@ -231,4 +232,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default memo(UserManagement);
