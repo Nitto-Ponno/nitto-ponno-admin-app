@@ -1,6 +1,8 @@
+'use client';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -17,6 +19,9 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { sidebarItems } from '@/lib/data/side-bar-data';
 import { memo } from 'react';
+import { NavUser } from './nav-user';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 // Menu item type
 export type SidebarType = {
@@ -28,6 +33,8 @@ export type SidebarType = {
 
 // Recursive Renderer
 function SidebarItem({ item }: { item: SidebarType }) {
+  const path = usePathname();
+
   if (item.children && item.children.length > 0) {
     return (
       <Collapsible defaultOpen={false} className="group/collapsible">
@@ -43,8 +50,15 @@ function SidebarItem({ item }: { item: SidebarType }) {
             <SidebarGroupContent>
               <SidebarMenu>
                 {item.children.map((child) => (
-                  <SidebarMenuItem key={child.title} className="ml-2">
-                    <SidebarMenuButton asChild className="">
+                  <SidebarMenuItem key={child.title} className="ml-2 flex">
+                    <SidebarMenuButton
+                      asChild
+                      className={cn(
+                        '!text-sidebar-accent-foreground hover:bg-accent',
+                        path === child.url && '!bg-primary !text-white',
+                      )}
+                      isActive={path === child.url}
+                    >
                       <Link href={child.url || '#'}>
                         {child.icon && <child.icon className="mr-2 h-4 w-4" />}
                         {child.title}
@@ -62,7 +76,14 @@ function SidebarItem({ item }: { item: SidebarType }) {
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild className="!text-sidebar-accent-foreground">
+      <SidebarMenuButton
+        asChild
+        className={cn(
+          '!text-sidebar-accent-foreground hover:bg-accent',
+          path === item.url && '!bg-primary !text-white',
+        )}
+        isActive={path === item.url}
+      >
         <Link href={item.url || '#'}>
           {item.icon && <item.icon className="mr-2 h-4 w-4" />}
           {item.title}
@@ -73,6 +94,11 @@ function SidebarItem({ item }: { item: SidebarType }) {
 }
 
 function AppSidebar() {
+  const user = {
+    name: 'shadcn',
+    email: 'm@example.com',
+    avatar: '/avatars/shadcn.jpg',
+  };
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="">
@@ -87,6 +113,10 @@ function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <NavUser user={user} />
+      </SidebarFooter>
     </Sidebar>
   );
 }
