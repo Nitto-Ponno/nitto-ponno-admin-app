@@ -133,6 +133,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => (
       <div className="font-medium">{row.getValue('name')}</div>
     ),
+    id: 'name',
   },
   {
     accessorKey: 'email',
@@ -140,11 +141,13 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => (
       <div className="text-muted-foreground">{row.getValue('email')}</div>
     ),
+    id: 'email',
   },
   {
     accessorKey: 'role',
     header: 'Role',
     cell: ({ row }) => <div>{row.getValue('role')}</div>,
+    id: 'role',
   },
   {
     accessorKey: 'status',
@@ -165,6 +168,7 @@ const columns: ColumnDef<User>[] = [
         </Badge>
       );
     },
+    id: 'status',
   },
   {
     accessorKey: 'joinedDate',
@@ -173,6 +177,7 @@ const columns: ColumnDef<User>[] = [
       const date = new Date(row.getValue('joinedDate'));
       return <div>{date.toLocaleDateString()}</div>;
     },
+    id: 'joinedDate',
   },
 
   {

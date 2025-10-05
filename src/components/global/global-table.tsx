@@ -45,6 +45,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+export type StrictColumnDef<TData, TValue = unknown> = Omit<
+  ColumnDef<TData, TValue>,
+  'accessorKey'
+> & {
+  accessorKey?: keyof TData;
+};
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -90,7 +96,6 @@ export function GlobalTable<TData, TValue>({
     enableSorting,
   });
 
-  console.log({ table: table.options });
   const exportToCSV = () => {
     const rows = table.getFilteredRowModel().rows;
     const visibleColumns = table
