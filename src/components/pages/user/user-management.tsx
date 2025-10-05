@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { GlobalTable } from '@/components/global/global-table';
+import { memo } from 'react';
 
 // Sample data type
 type User = {
@@ -132,6 +133,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => (
       <div className="font-medium">{row.getValue('name')}</div>
     ),
+    id: 'name',
   },
   {
     accessorKey: 'email',
@@ -139,11 +141,13 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => (
       <div className="text-muted-foreground">{row.getValue('email')}</div>
     ),
+    id: 'email',
   },
   {
     accessorKey: 'role',
     header: 'Role',
     cell: ({ row }) => <div>{row.getValue('role')}</div>,
+    id: 'role',
   },
   {
     accessorKey: 'status',
@@ -164,6 +168,7 @@ const columns: ColumnDef<User>[] = [
         </Badge>
       );
     },
+    id: 'status',
   },
   {
     accessorKey: 'joinedDate',
@@ -172,6 +177,7 @@ const columns: ColumnDef<User>[] = [
       const date = new Date(row.getValue('joinedDate'));
       return <div>{date.toLocaleDateString()}</div>;
     },
+    id: 'joinedDate',
   },
 
   {
@@ -231,4 +237,4 @@ const UserManagement = () => {
   );
 };
 
-export default UserManagement;
+export default memo(UserManagement);
