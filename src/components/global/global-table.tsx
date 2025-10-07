@@ -58,6 +58,7 @@ interface DataTableProps<TData, TValue> {
   searchPlaceholder?: string;
   enableExport?: boolean;
   enableSorting?: boolean;
+  buttons?: React.ReactNode[];
 }
 
 export function GlobalTable<TData, TValue>({
@@ -67,6 +68,7 @@ export function GlobalTable<TData, TValue>({
   searchPlaceholder = 'Search...',
   enableExport = false,
   enableSorting = false,
+  buttons,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -154,6 +156,7 @@ export function GlobalTable<TData, TValue>({
           </div>
         )}
         <div className="flex items-center gap-2">
+          {buttons && buttons}
           {enableExport && (
             <Button variant="default" onClick={exportToCSV}>
               <Download className="mr-2 h-4 w-4" />
