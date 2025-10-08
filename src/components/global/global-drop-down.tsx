@@ -6,6 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Separator } from '../ui/separator';
 
 type AlignType = 'start' | 'center' | 'end';
 
@@ -27,13 +28,18 @@ const GlobalDropDown: React.FC<GlobalDropDownProps> = ({
       <DropdownMenuTrigger asChild>{dropdownMenuTrigger}</DropdownMenuTrigger>
       <DropdownMenuContent align={align}>
         {dropdownMenuLabel && (
-          <DropdownMenuLabel>{dropdownMenuLabel}</DropdownMenuLabel>
+          <DropdownMenuLabel className="text-center">
+            {dropdownMenuLabel}
+          </DropdownMenuLabel>
         )}
-        {dropdownMenuItems.map((item, i) => (
-          <DropdownMenuItem key={i} asChild>
-            {item}
-          </DropdownMenuItem>
-        ))}
+        <Separator />
+        <div className="mt-1 space-y-2">
+          {dropdownMenuItems.map((item, i) => (
+            <DropdownMenuItem key={i} asChild>
+              {item}
+            </DropdownMenuItem>
+          ))}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
