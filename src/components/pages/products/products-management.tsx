@@ -171,8 +171,8 @@ const ProductsManagement = () => {
             Product Management
           </h1>
           <p className="text-muted-foreground">
-            A reusable data table with search, filtering, sorting, column
-            settings, export, and pagination.
+            Manage and explore product data effortlessly with built-in search,
+            sorting, filters, exports, and more.
           </p>
         </div>
 
