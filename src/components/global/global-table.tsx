@@ -138,10 +138,10 @@ export function GlobalTable<TData, TValue>({
   };
 
   return (
-    <div className="w-full space-y-4">
-      <div className="flex items-center justify-between gap-4">
+    <div className="w-full space-y-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         {searchKey && (
-          <div className="relative max-w-sm flex-1">
+          <div className="relative w-full max-w-sm flex-1">
             <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               placeholder={searchPlaceholder}
@@ -155,7 +155,7 @@ export function GlobalTable<TData, TValue>({
             />
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:w-full">
           {buttons && buttons}
           {enableExport && (
             <Button variant="default" onClick={exportToCSV}>

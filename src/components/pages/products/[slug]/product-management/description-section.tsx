@@ -43,7 +43,7 @@ export function DescriptionSection({ form }: DescriptionSectionProps) {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="en" className="w-full">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="h-auto flex-wrap">
             {languages.map((lang) => (
               <TabsTrigger key={lang.code} value={lang.code}>
                 {lang.label}

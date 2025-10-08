@@ -8,10 +8,15 @@ import products from '@/components/pages/products/products.json';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import GlobalDropDown from '@/components/global/global-drop-down';
-import { Ellipsis, Plus } from 'lucide-react';
+import { Ellipsis, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import AddProductForm from './[slug]/product-management/add-product-form';
 
 const ProductsManagement = () => {
@@ -206,7 +211,10 @@ const AddProductDrawer = ({
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>{drawerTrigger}</DrawerTrigger>
-      <DrawerContent className="!w-full !max-w-none overflow-x-hidden overflow-y-auto sm:!w-7xl sm:p-6">
+      <DrawerContent className="!w-full !max-w-none overflow-x-hidden overflow-y-auto p-6 pt-1">
+        <DrawerClose className="absolute -top-5 w-fit rounded-full bg-red-400 p-1 text-white">
+          <X />
+        </DrawerClose>
         <AddProductForm slug={slug} />
       </DrawerContent>
     </Drawer>
