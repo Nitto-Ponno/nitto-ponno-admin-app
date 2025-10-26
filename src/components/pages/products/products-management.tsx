@@ -171,8 +171,8 @@ const ProductsManagement = () => {
             Product Management
           </h1>
           <p className="text-muted-foreground">
-            A reusable data table with search, filtering, sorting, column
-            settings, export, and pagination.
+            Manage and explore product data effortlessly with built-in search,
+            sorting, filters, exports, and more.
           </p>
         </div>
 
@@ -186,7 +186,7 @@ const ProductsManagement = () => {
             <AddProductDrawer
               key={'add product'}
               drawerTrigger={
-                <Button>
+                <Button className="w-auto lg:w-fit">
                   <Plus />
                   Add product
                 </Button>
@@ -212,7 +212,7 @@ const AddProductDrawer = ({
     <Drawer direction="right">
       <DrawerTrigger asChild>{drawerTrigger}</DrawerTrigger>
       <DrawerContent className="!w-full !max-w-none overflow-x-hidden overflow-y-auto p-6 pt-1">
-        <DrawerClose className="absolute -top-5 w-fit rounded-full bg-red-400 p-1 text-white">
+        <DrawerClose className="-top-5 mb-2 w-fit rounded-full bg-red-400 p-1 text-white">
           <X />
         </DrawerClose>
         <AddProductForm slug={slug} />

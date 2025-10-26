@@ -139,9 +139,9 @@ export function GlobalTable<TData, TValue>({
 
   return (
     <div className="w-full space-y-3">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-nowrap">
         {searchKey && (
-          <div className="relative w-full max-w-sm flex-1">
+          <div className="relative w-full flex-1">
             <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               placeholder={searchPlaceholder}
@@ -155,17 +155,24 @@ export function GlobalTable<TData, TValue>({
             />
           </div>
         )}
-        <div className="flex flex-wrap items-center gap-2 sm:w-full">
+        <div className="flex w-full items-center gap-2 lg:w-fit">
           {buttons && buttons}
           {enableExport && (
-            <Button variant="default" onClick={exportToCSV}>
+            <Button
+              variant="default"
+              onClick={exportToCSV}
+              className="w-auto lg:w-fit"
+            >
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="bg-transparent">
+              <Button
+                variant="outline"
+                className="w-auto bg-transparent lg:w-fit"
+              >
                 <Settings2 className="mr-2 h-4 w-4" />
                 Columns
                 <ChevronDown className="ml-2 h-4 w-4" />

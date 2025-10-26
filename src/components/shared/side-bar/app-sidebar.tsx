@@ -40,7 +40,7 @@ function SidebarItem({ item }: { item: SidebarType }) {
       <Collapsible defaultOpen={false} className="group/collapsible">
         <SidebarGroup className="p-0">
           <SidebarGroupLabel asChild>
-            <CollapsibleTrigger className="!text-sidebar-accent-foreground flex items-center !text-sm">
+            <CollapsibleTrigger className="!text-sidebar-accent-foreground hover:bg-accent flex cursor-pointer items-center !text-sm">
               {item.icon && <item.icon className="mr-2 h-4 w-4" />}
               {item.title}
               <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
