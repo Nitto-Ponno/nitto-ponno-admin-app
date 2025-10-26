@@ -1,15 +1,18 @@
-npx lint-staged
-
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
 echo '🤔🤔🤔🤔... Alright... Code looks good to me... Trying to build now. 🤔🤔🤔🤔'
 
+# Run lint-staged (format + lint fixes)
+npx lint-staged
+
+# Try to build — fail early if build fails
 npm run build ||
 (
-    echo '❌👷🔨❌ Better call Mahmud... Because your build failed ❌👷🔨❌
-            Next build failed: View the errors above to see why. 
-    '
-    false;
+  echo '❌👷🔨❌ Better call Mahmud... Because your build failed ❌👷🔨❌
+  Next build failed: View the errors above to see why. 
+  '
+  false
 )
 
-# If everything passes... Now we can commit
 echo '✅✅✅✅ You win this time... I am committing this now. ✅✅✅✅'

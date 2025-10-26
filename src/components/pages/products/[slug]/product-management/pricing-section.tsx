@@ -92,7 +92,6 @@ export function PricingSection({ form }: PricingSectionProps) {
                     }
                   />
                 </FormControl>
-                <FormDescription>Percentage discount</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
