@@ -25,16 +25,7 @@ export const sidebarItems: SidebarType[] = [
   { title: 'App Settings', url: '/app-settings', icon: Settings },
   { title: 'Bulk Push Notifications', url: '/push', icon: Inbox },
   { title: 'Pickup Settings', url: '/pickup', icon: Calendar },
-  { title: 'Coupon Settings', url: '/coupon', icon: Tag },
-
-  {
-    title: 'Reports',
-    icon: FileText,
-    children: [
-      { title: 'Users Report', url: '/reports/users', icon: Users },
-      { title: 'Orders Report', url: '/reports/orders', icon: ShoppingCart },
-    ],
-  },
+  { title: 'Laundry Service', url: '/laundry-service', icon: Tag },
   {
     title: 'Categories Management',
     icon: FolderTree,
