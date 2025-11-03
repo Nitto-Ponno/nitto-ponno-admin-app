@@ -16,6 +16,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { logout } from '@/redux/features/auth/authReducer';
+import { useAppDispatch } from '@/redux/hook';
 import {
   Bell,
   CircleUserRound,
@@ -23,6 +25,8 @@ import {
   EllipsisVertical,
   LogOut,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export function NavUser({
   user,
@@ -34,7 +38,14 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push('/auth/login');
+    toast.success('You have successfully logged out');
+  };
   return (
     <SidebarMenu className="">
       <SidebarMenuItem>
@@ -93,7 +104,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut /> Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

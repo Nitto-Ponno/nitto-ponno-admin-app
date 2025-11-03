@@ -4,7 +4,8 @@ import Cookies from 'js-cookie';
 
 // Axios instance setup
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  // baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL_LOCAL,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -14,7 +15,7 @@ const instance = axios.create({
 // Separate instance for refreshing tokens
 export const refreshInstance = axios.create({
   withCredentials: true,
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL_LOCAL,
   timeout: 60000,
 });
 
