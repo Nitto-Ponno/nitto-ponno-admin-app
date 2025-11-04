@@ -1,6 +1,6 @@
 'use client';
 
-import React, { memo, useState } from 'react';
+import React, { Activity, memo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,37 +17,58 @@ import {
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import GoogleIcon from '@/components/shared/svg/google-Icon';
-import { Eye, EyeClosedIcon, Lock, Mail, User, UserPlus } from 'lucide-react';
+import {
+  Eye,
+  EyeClosedIcon,
+  Lock,
+  Mail,
+  Phone,
+  User,
+  UserPlus,
+} from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { TSignupUser } from '@/types';
+import { useSignupUserMutation } from '@/redux/api/auth/auth-api';
+import VerificationSentCard from './verification-sent-card';
+import { cn } from '@/lib/utils';
 
-// Signup Form Schema (Zod)
-// ===========================
+//  Zod Schema (matches TSignupUser)
 export const signupFormSchema = z
   .object({
-    // Full name validation
-    fullName: z.string().trim().min(2, {
-      message: 'Full name must be at least 2 characters.',
+    name: z.object({
+      firstName: z
+        .string()
+        .trim()
+        .min(2, { error: 'First name must be at least 2 characters.' }),
+      middleName: z.string().trim().optional(),
+      lastName: z
+        .string()
+        .trim()
+        .min(2, { error: 'Last name must be at least 2 characters.' }),
     }),
 
-    // Email validation
-    email: z.email({ message: 'Please enter a valid email address.' }),
+    email: z.email({ error: 'Please enter a valid email address.' }),
 
-    // Strong password validation rules
+    phoneNumber: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, { error: 'Phone number must contain only numbers' })
+      .min(5, { error: 'Phone number must be at least 5 digits long' }),
+
     password: z
       .string()
-      .min(8, { message: 'Password must be at least 8 characters long.' })
+      .min(8, { error: 'Password must be at least 8 characters long.' })
       .regex(/[A-Z]/, {
-        message: 'Password must contain at least one uppercase letter.',
+        error: 'Must contain at least one uppercase letter.',
       })
       .regex(/[a-z]/, {
-        message: 'Password must contain at least one lowercase letter.',
+        error: 'Must contain at least one lowercase letter.',
       })
-      .regex(/[0-9]/, { message: 'Password must contain at least one number.' })
+      .regex(/[0-9]/, { error: 'Must contain at least one number.' })
       .regex(/[^A-Za-z0-9]/, {
-        message: 'Password must contain at least one special character.',
+        error: 'Must contain at least one special character.',
       }),
 
-    // Confirm password (must match password)
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -55,189 +76,306 @@ export const signupFormSchema = z
     path: ['confirmPassword'],
   });
 
-/* ---------------- Component ---------------- */
+//  Component
 const SignupForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
+  const [isVerificationSent, setIsVerificationSent] = useState(false);
+
+  const [signUp] = useSignupUserMutation();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
-      fullName: '',
+      name: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+      },
       email: '',
+      phoneNumber: '',
       password: '',
       confirmPassword: '',
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof signupFormSchema>) => {
-    // console.log(values);
+  const handleSubmit = async (values: z.infer<typeof signupFormSchema>) => {
+    const formattedData: TSignupUser = {
+      email: values.email,
+      password: values.password,
+      phoneNumber: values.phoneNumber,
+      name: {
+        firstName: values.name.firstName,
+        middleName: values.name.middleName || '',
+        lastName: values.name.lastName,
+      },
+    };
+
+    const res = await signUp(formattedData);
+
+    console.log(res);
+
+    if (res.data.success) {
+      //
+      setIsVerificationSent(true);
+    }
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="text-sidebar-foreground space-y-6 rounded-lg border p-6"
-      >
-        <div className="text-center text-black">
-          <p className="text-3xl font-bold">Sign Up</p>
-          <p className="text-sm">
-            Create an account by sign up with provider or email, password
-          </p>
-        </div>
-        {/* Full Name */}
-        <FormField
-          control={form.control}
-          name="fullName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Write your full name"
-                  {...field}
-                  prefix={<User className="text-sidebar-foreground size-4" />}
-                  className="h-12"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <div className={cn(!isVerificationSent ? 'visible' : 'hidden')}>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="text-sidebar-foreground space-y-6 rounded-lg border p-6"
+          >
+            <div className="text-center text-black">
+              <p className="text-3xl font-bold">Sign Up</p>
+              <p className="text-sm">
+                Create an account by signing up with your email and password
+              </p>
+            </div>
 
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Write your email"
-                  type="email"
-                  {...field}
-                  prefix={<Mail className="text-sidebar-foreground size-4" />}
-                  className="h-12"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+              {/* First Name */}
+              <FormField
+                control={form.control}
+                name="name.firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      First Name <span className="text-destructive">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter first name"
+                        {...field}
+                        prefix={
+                          <User className="text-sidebar-foreground size-4" />
+                        }
+                        className="h-12"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        {/* Password */}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your password"
-                  type={isPasswordVisible ? 'text' : 'password'}
-                  {...field}
-                  prefix={<Lock className="text-sidebar-foreground size-4" />}
-                  suffix={
-                    <span
-                      onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                      className="cursor-pointer"
-                    >
-                      {isPasswordVisible ? (
-                        <Eye className="text-sidebar-foreground size-4" />
-                      ) : (
-                        <EyeClosedIcon className="text-sidebar-foreground size-4" />
-                      )}
-                    </span>
-                  }
-                  className="h-12"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              {/* Middle Name */}
+              <FormField
+                control={form.control}
+                name="name.middleName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Middle Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter middle name"
+                        {...field}
+                        prefix={
+                          <User className="text-sidebar-foreground size-4" />
+                        }
+                        className="h-12"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        {/* Confirm Password */}
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter password again"
-                  type={isConfirmPasswordVisible ? 'text' : 'password'}
-                  {...field}
-                  prefix={<Lock className="text-sidebar-foreground size-4" />}
-                  className="h-12"
-                  suffix={
-                    <span
-                      onClick={() =>
-                        setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
+              {/* Last Name */}
+              <FormField
+                control={form.control}
+                name="name.lastName"
+                render={({ field }) => (
+                  <FormItem className="col-span-1 md:col-span-2 lg:col-span-1">
+                    <FormLabel>
+                      Last Name <span className="text-destructive">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter last name"
+                        {...field}
+                        prefix={
+                          <User className="text-sidebar-foreground size-4" />
+                        }
+                        className="h-12"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Email <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="Write your email"
+                      {...field}
+                      prefix={
+                        <Mail className="text-sidebar-foreground size-4" />
                       }
-                      className="cursor-pointer"
-                    >
-                      {isConfirmPasswordVisible ? (
-                        <Eye className="text-sidebar-foreground size-4" />
-                      ) : (
-                        <EyeClosedIcon className="text-sidebar-foreground size-4" />
-                      )}
-                    </span>
-                  }
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <Link
-            href={'/auth/login'}
-            className="hover:text-chart-2 text-left text-sm hover:underline"
-          >
-            Already have account?
-          </Link>
-        </div>
+                      className="h-12"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Submit */}
-        <div className="space-y-3">
-          <Button type="submit" size={'xl'} className="w-full font-bold">
-            <UserPlus />
-            Register
-          </Button>
-          <Separator
-            className="font-bold text-red-500"
-            classNameForChildren=" text-xs"
-          >
-            OR
-          </Separator>
-          <Button
-            type="submit"
-            size={'xl'}
-            className="w-full font-bold"
-            variant={'tertiary'}
-          >
-            <GoogleIcon />
-            Sign Up With Google
-          </Button>
-        </div>
+            {/* Phone */}
+            <FormField
+              control={form.control}
+              name="phoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Phone Number <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter phone number"
+                      {...field}
+                      prefix={
+                        <Phone className="text-sidebar-foreground size-4" />
+                      }
+                      className="h-12"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div className="flex justify-center gap-3 text-sm">
-          Already have account?
-          <Link
-            href={'/auth/login'}
-            className="hover:text-chart-2 font-semibold text-black hover:underline"
-          >
-            Login
-          </Link>
-        </div>
-      </form>
-    </Form>
+            {/* Password */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Password <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type={isPasswordVisible ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      {...field}
+                      prefix={
+                        <Lock className="text-sidebar-foreground size-4" />
+                      }
+                      suffix={
+                        <span
+                          onClick={() =>
+                            setIsPasswordVisible(!isPasswordVisible)
+                          }
+                          className="cursor-pointer"
+                        >
+                          {isPasswordVisible ? (
+                            <Eye className="text-sidebar-foreground size-4" />
+                          ) : (
+                            <EyeClosedIcon className="text-sidebar-foreground size-4" />
+                          )}
+                        </span>
+                      }
+                      className="h-12"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Confirm Password */}
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Confirm Password <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type={isConfirmPasswordVisible ? 'text' : 'password'}
+                      placeholder="Confirm your password"
+                      {...field}
+                      prefix={
+                        <Lock className="text-sidebar-foreground size-4" />
+                      }
+                      suffix={
+                        <span
+                          onClick={() =>
+                            setIsConfirmPasswordVisible(
+                              !isConfirmPasswordVisible,
+                            )
+                          }
+                          className="cursor-pointer"
+                        >
+                          {isConfirmPasswordVisible ? (
+                            <Eye className="text-sidebar-foreground size-4" />
+                          ) : (
+                            <EyeClosedIcon className="text-sidebar-foreground size-4" />
+                          )}
+                        </span>
+                      }
+                      className="h-12"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Submit */}
+            <div className="space-y-3">
+              <Button type="submit" size="xl" className="w-full font-bold">
+                <UserPlus />
+                Register
+              </Button>
+
+              <Separator className="font-bold" classNameForChildren="text-xs">
+                OR
+              </Separator>
+
+              <Button
+                type="button"
+                size="xl"
+                className="w-full font-bold"
+                variant="tertiary"
+              >
+                <GoogleIcon />
+                Sign Up With Google
+              </Button>
+            </div>
+
+            <div className="flex justify-center gap-3 text-sm">
+              Already have an account?
+              <Link
+                href="/auth/login"
+                className="hover:text-chart-2 font-semibold text-black hover:underline"
+              >
+                Login
+              </Link>
+            </div>
+          </form>
+        </Form>
+      </div>
+      <div className={cn(isVerificationSent ? 'visible' : 'hidden')}>
+        <VerificationSentCard />
+      </div>
+    </>
   );
 };
 

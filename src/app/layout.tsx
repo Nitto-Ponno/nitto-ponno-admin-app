@@ -4,6 +4,8 @@ import './globals.css';
 import NextTopLoader from 'nextjs-toploader';
 import { ThemeProvider } from 'next-themes';
 import ReduxProvider from '@/providers/ReduxProvider';
+import { Toaster } from '@/components/ui/sonner';
+import AuthProvider from '@/providers/AuthProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,6 +38,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster position="top-center" richColors />
+
           <NextTopLoader showSpinner={false} />
           <ReduxProvider>{children}</ReduxProvider>
         </ThemeProvider>

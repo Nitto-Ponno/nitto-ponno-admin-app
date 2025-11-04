@@ -14,11 +14,18 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import Cookies from 'js-cookie';
+
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import GoogleIcon from '@/components/shared/svg/google-Icon';
 import { Eye, EyeClosedIcon, Lock, LogIn, Mail } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { useLoginUserMutation } from '@/redux/api/auth/auth-api';
+import { toast } from 'sonner';
+import { useAppDispatch } from '@/redux/hook';
+import { setUser } from '@/redux/features/auth/authReducer';
+import { useRouter } from 'next/navigation';
 
 // Login Form Schema (Zod)
 // ===========================
@@ -32,17 +39,32 @@ export const loginFormSchema = z.object({
 /* ---------------- Component ---------------- */
 const LoginForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [login] = useLoginUserMutation();
+
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'user@example.com',
+      password: 'password123',
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof loginFormSchema>) => {
-    // console.log(values);
+  const handleSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+    const res = await login(values);
+    console.log({ res });
+
+    if (res.data.data) {
+      //
+      dispatch(setUser(res.data.data));
+
+      toast.success(res.data.message);
+      router.push('/');
+    } else {
+      toast.error(res.data.message);
+    }
   };
 
   return (
@@ -67,6 +89,7 @@ const LoginForm = () => {
                 <Input
                   placeholder="Write your email"
                   type="email"
+                  defaultValue={'user@example.com'}
                   {...field}
                   prefix={<Mail className="text-sidebar-foreground size-4" />}
                   className="h-12"
@@ -87,6 +110,7 @@ const LoginForm = () => {
               <FormControl>
                 <Input
                   placeholder="Enter your password"
+                  defaultValue="password123"
                   type={isPasswordVisible ? 'text' : 'password'}
                   {...field}
                   prefix={<Lock className="text-sidebar-foreground size-4" />}

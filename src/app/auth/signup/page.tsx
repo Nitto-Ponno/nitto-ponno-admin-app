@@ -3,7 +3,7 @@ import SignupForm from '@/components/pages/auth/signup/signup-form';
 
 const Signup = () => {
   return (
-    <div className="mx-auto w-lg">
+    <div className="mx-auto w-2xl">
       <SignupForm />
     </div>
   );

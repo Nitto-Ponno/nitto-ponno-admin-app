@@ -19,6 +19,9 @@ import Link from 'next/link';
 import GoogleIcon from '@/components/shared/svg/google-Icon';
 import { Mail, RotateCw } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { useForgetPasswordMutation } from '@/redux/api/auth/auth-api';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 // Forget PasswordForm Form Schema (Zod)
 // ===========================
@@ -28,6 +31,10 @@ export const forgetPasswordFormSchema = z.object({
 
 /* ---------------- Component ---------------- */
 const ForgetPasswordForm = () => {
+  const router = useRouter();
+
+  const [forgetPassword] = useForgetPasswordMutation();
+
   const form = useForm<z.infer<typeof forgetPasswordFormSchema>>({
     resolver: zodResolver(forgetPasswordFormSchema),
     defaultValues: {
@@ -35,8 +42,16 @@ const ForgetPasswordForm = () => {
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof forgetPasswordFormSchema>) => {
-    // console.log(values)
+  const handleSubmit = async (
+    values: z.infer<typeof forgetPasswordFormSchema>,
+  ) => {
+    const res = await forgetPassword(values);
+    console.log(res);
+    if (res?.data?.success) {
+      //
+      toast.success(res.data.message);
+      router.push('/auth/forget-password/otp');
+    }
   };
 
   return (
@@ -54,6 +69,7 @@ const ForgetPasswordForm = () => {
         <FormField
           control={form.control}
           name="email"
+          defaultValue={'user@example.com'}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
@@ -61,6 +77,7 @@ const ForgetPasswordForm = () => {
                 <Input
                   placeholder="Write your register email"
                   type="email"
+                  defaultValue={'user@example.com'}
                   {...field}
                   prefix={<Mail className="text-sidebar-foreground size-4" />}
                   className="h-12"
