@@ -1,0 +1,5 @@
+_id,name,slug,isFeatured,parent_id,image,description,createdAt,updatedAt,
+68ee813febd86f522cf4180e,Electronics,electronics,Yes,null,https://example.com/images/electronics.jpg,Electronic devices, gadgets, and accessories.,2025-10-14T16:58:39.729Z,2025-10-14T16:58:39.729Z
+68ee813febd86f522cf4199f,Home Appliances,home-appliances,Yes,null,https://example.com/images/home-appliances.jpg,Appliances for home and daily use.,2025-10-14T18:00:00.000Z,2025-10-14T18:00:00.000Z
+68ee813febd86f522cf41a1a,Fashion,fashion,Yes,null,https://example.com/images/fashion.jpg,Men’s, women’s, and kids’ clothing and accessories.,2025-10-17T09:00:00.000Z,2025-10-17T09:00:00.000Z
+68ee813febd86f522cf41a4f,Sports & Outdoors,sports-outdoors,No,null,https://example.com/images/sports.jpg,Sports gear, fitness equipment, and outdoor essentials.,2025-10-18T08:00:00.000Z,2025-10-18T08:00:00.000Z

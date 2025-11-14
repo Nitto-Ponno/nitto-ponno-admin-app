@@ -23,9 +23,11 @@ export const refreshInstance = axios.create({
 instance.interceptors.request.use(async (config) => {
   const token = Cookies.get(process.env.NEXT_PUBLIC_AUTH_TOKEN_NAME as string);
 
-  // if (token) {
-  //   config.headers['Authorization'] = `${token}`;
-  // }
+  console.log({ token });
+
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
 
   // const enroll = await storage.getItem('active_enrolment');
   // const enrollId = enroll?._id;
