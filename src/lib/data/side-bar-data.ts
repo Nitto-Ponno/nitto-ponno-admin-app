@@ -16,6 +16,7 @@ import {
   Bell,
   Images,
   Rss,
+  Paperclip,
 } from 'lucide-react';
 import { SidebarType } from '../../components/shared/side-bar/app-sidebar';
 
@@ -35,6 +36,11 @@ export const sidebarItems: SidebarType[] = [
       { title: 'Sub Collections', url: '/sub-collections', icon: Package },
       { title: 'Brands', url: '/brands', icon: Tag },
     ],
+  },
+  {
+    title: 'Attribute Management',
+    icon: Paperclip,
+    url: '/attribute',
   },
   {
     title: 'Orders',
