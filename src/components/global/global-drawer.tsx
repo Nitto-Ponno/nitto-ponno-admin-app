@@ -20,7 +20,8 @@ export const GlobalDrawer = ({
 }) => {
   return (
     <Drawer direction="right" open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger asChild>{drawerTrigger}</DrawerTrigger>
+      {drawerTrigger && <DrawerTrigger asChild>{drawerTrigger}</DrawerTrigger>}
+
       <DrawerContent className="!w-full !max-w-none overflow-x-hidden overflow-y-auto p-6 pt-1">
         <DrawerClose className="-top-5 mb-2 w-fit rounded-full bg-red-400 p-1 text-white">
           <X />

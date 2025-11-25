@@ -22,9 +22,9 @@ const attribute = baseApi.injectEndpoints({
       Partial<TAttribute>
     >({
       query: (data) => ({
-        url: `/category/${data._id}`,
+        url: `/laundryAttribute/${data._id}`,
         method: 'PATCH',
-        data: { name: data.name, description: data.description },
+        data: data,
         tagTypes: tagTypes.attribute,
       }),
       invalidatesTags: [tagTypes.attribute],
@@ -40,7 +40,7 @@ const attribute = baseApi.injectEndpoints({
 
     getSingleAttribute: build.query<ApiResponse<TAttribute>, { id: string }>({
       query: ({ id }) => ({
-        url: `/category/single/${id}`,
+        url: `/laundryAttribute/${id}`,
         method: 'GET',
       }),
     }),
@@ -50,7 +50,7 @@ const attribute = baseApi.injectEndpoints({
       { id: string }
     >({
       query: ({ id }) => ({
-        url: `/category/${id}`,
+        url: `/laundryAttribute/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: [tagTypes.attribute],
@@ -58,5 +58,9 @@ const attribute = baseApi.injectEndpoints({
   }),
 });
 
-export const { useCreateAttributeMutation, useGetAllAttributeQuery } =
-  attribute;
+export const {
+  useCreateAttributeMutation,
+  useGetAllAttributeQuery,
+  useUpdateAttributeMutation,
+  useDeleteAttributeMutation,
+} = attribute;

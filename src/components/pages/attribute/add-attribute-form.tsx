@@ -17,7 +17,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { memo, useEffect } from 'react';
-import { useCreateAttributeMutation } from '@/redux/api/attribute/attribute-api';
+import {
+  useCreateAttributeMutation,
+  useUpdateAttributeMutation,
+} from '@/redux/api/attribute/attribute-api';
 
 // ZOD SCHEMA
 
@@ -38,13 +41,15 @@ type TAttributeForm = z.infer<typeof attributeSchema>;
 
 type Props = {
   id?: string;
-  onClose?: React.Dispatch<boolean>;
+  onClose: React.Dispatch<boolean>;
   initialData?: any;
 };
 
 function AddAttributeForm({ id, onClose, initialData }: Props) {
   const [createAttribute] = useCreateAttributeMutation();
+  const [updateAttribute] = useUpdateAttributeMutation();
 
+  console.log({ initialData });
   const form = useForm<TAttributeForm>({
     resolver: zodResolver(attributeSchema),
     defaultValues: {
@@ -67,15 +72,26 @@ function AddAttributeForm({ id, onClose, initialData }: Props) {
   }, [initialData]);
 
   async function onSubmit(values: TAttributeForm) {
-    console.log('Submitted Attribute:', values);
-
-    const res = await createAttribute(values);
-
-    console.log({ res });
-
-    toast.success(id ? 'Attribute updated successfully' : 'Attribute created');
-
-    onClose?.(false);
+    if (id) {
+      const res = await updateAttribute({
+        _id: initialData._id,
+        ...values,
+      });
+      if (res?.data?.success) {
+        toast.success(res.data?.message);
+        onClose(false);
+      } else {
+        toast.error(res?.data?.message);
+      }
+    } else {
+      const res = await createAttribute(values);
+      if (res?.data?.success) {
+        toast.success(res.data?.message);
+        onClose(false);
+      } else {
+        toast.error(res?.data?.message);
+      }
+    }
   }
 
   return (
