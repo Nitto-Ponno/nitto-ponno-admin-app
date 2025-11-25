@@ -97,7 +97,6 @@ const CategoriesManagement = () => {
               allCategories={categories || []}
             />
           </GlobalDrawer>
-          ,
         </div>
       </div>
 
