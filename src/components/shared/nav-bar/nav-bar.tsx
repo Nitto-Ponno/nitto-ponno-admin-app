@@ -6,7 +6,7 @@ import ThemeToggle from './theme-toggle';
 
 const Navbar = () => {
   return (
-    <div className="flex items-center py-3 shadow">
+    <div className="bg-background sticky top-0 z-50 flex items-center border-b py-3">
       <SidebarTrigger />
       <div className="flex w-full justify-between">
         <Input

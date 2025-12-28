@@ -67,9 +67,8 @@ const CreateServiceDialog = () => {
 
   const onSubmit = async (data: LaundryServiceFormData) => {
     try {
-      const res = createService(data).unwrap();
+      const res = await createService(data).unwrap();
       if (res) {
-        console.log(res);
         setOpen(false);
         form.reset();
       }
