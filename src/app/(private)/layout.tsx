@@ -12,10 +12,9 @@ const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
       <SidebarProvider>
         <AppSidebar />
 
-        <main className="w-full overflow-y-hidden">
-          {' '}
+        <main className="w-full">
           <Navbar />
-          {children}
+          <div className="p-2">{children}</div>
         </main>
       </SidebarProvider>
     </AuthProvider>

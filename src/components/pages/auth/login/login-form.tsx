@@ -54,12 +54,14 @@ const LoginForm = () => {
 
   const handleSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     const res = await login(values);
-    console.log({ res });
 
     if (res.data.data) {
       //
       dispatch(setUser(res.data.data));
-
+      Cookies.set(
+        process.env.NEXT_PUBLIC_AUTH_TOKEN_NAME as string,
+        res.data.data.accessToken,
+      );
       toast.success(res.data.message);
       router.push('/');
     } else {
