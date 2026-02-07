@@ -23,20 +23,10 @@ import { SidebarType } from '../../components/shared/side-bar/app-sidebar';
 export const sidebarItems: SidebarType[] = [
   { title: 'Dashboard', url: '/dashboard', icon: Home },
   { title: 'Profile', url: '/profile', icon: Users },
-  { title: 'App Settings', url: '/app-settings', icon: Settings },
-  { title: 'Bulk Push Notifications', url: '/push', icon: Inbox },
-  { title: 'Pickup Settings', url: '/pickup', icon: Calendar },
   { title: 'Laundry Service', url: '/laundry-service', icon: Tag },
-  {
-    title: 'Categories Management',
-    icon: FolderTree,
-    children: [
-      { title: 'Categories', url: '/categories', icon: FolderTree },
-      { title: 'Collections', url: '/collections', icon: Package },
-      { title: 'Sub Collections', url: '/sub-collections', icon: Package },
-      { title: 'Brands', url: '/brands', icon: Tag },
-    ],
-  },
+
+  { title: 'Categories', url: '/categories', icon: FolderTree },
+
   {
     title: 'Attribute Management',
     icon: Paperclip,
@@ -47,16 +37,7 @@ export const sidebarItems: SidebarType[] = [
     icon: ShoppingCart,
     url: '/orders',
   },
-  {
-    title: 'Products Management',
-    icon: PackageOpen,
-    children: [
-      { title: 'Products', url: '/products', icon: PackageOpen },
-      { title: 'Flash Sales', url: '/flash-sales', icon: Tag },
-      { title: 'Hot Deals', url: '/hot-deals', icon: Tag },
-      { title: 'Returned Products', url: '/returned-products', icon: Package },
-    ],
-  },
+  { title: 'Products', url: '/products', icon: PackageOpen },
   {
     title: 'Users',
     icon: Users,
@@ -66,18 +47,5 @@ export const sidebarItems: SidebarType[] = [
     title: 'Riders',
     icon: Truck,
     url: '/riders',
-  },
-  {
-    title: 'Feeds',
-    icon: Rss,
-    children: [
-      { title: 'Feeds', url: '/feeds', icon: Rss },
-      { title: 'Banners', url: '/banners', icon: Images },
-    ],
-  },
-  {
-    title: 'Notifications',
-    icon: Bell,
-    url: '/notifications',
   },
 ];
